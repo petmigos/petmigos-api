@@ -1,0 +1,3 @@
+# Entidades
+
+Classes que representam as entidades do sistema. Ex: Usuários, Pets, etc...
