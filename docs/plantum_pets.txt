@@ -1,0 +1,97 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+enum GenderEnum{
+  MALE
+  FEMALE
+}
+
+class Tag{
+  -name: string
+  ---
+  // getters/setters
+}
+
+class PetType{
+  -name: string
+  ---
+  // getters/setters
+}
+
+class HygieneCategory{
+  -name: string
+  ---
+  // getters/setters
+}
+
+class Pet{
+  -id: number
+  -name: string
+  -type: PetType
+  -birthday: Date
+  -gender: Gender
+  -tags: Tag[]
+  -vaccines: Vaccine[]
+  -allergies: Allergy[]
+  -hygienes: Hygiene[]
+  -imageURL: string
+  -createdAt: Date
+  -updatedAt: Date
+  ---
+  // getters/setters
+}
+
+class Locale{
+  -name: string
+  ---
+  // getters/setters
+}
+
+class Vaccine{
+  -id: number
+  -name: string
+  -locale: Locale
+  -applied: boolean
+  -createdAt: Date
+  -updatedAt: Date
+  ---
+  // getters/setters
+}
+
+enum RiskEnum{
+  LOW
+  MODERATE
+  HIGH
+}
+
+class Allergy{
+  -id: number
+  -name: string
+  -risk: RiskEnum
+  -createdAt: Date
+  -updatedAt: Date
+  ---
+  // getters/setters
+}
+
+class Hygiene{
+  -id: number
+  -category: HygieneCategory
+  -description: string
+  -createdAt: Date
+  -updatedAt: Date
+  ---
+  // getters/setters
+}
+
+GenderEnum <-- Pet
+RiskEnum <-- Allergy
+Pet o-- Tag
+Pet o-- Vaccine
+Pet o-- Allergy
+Pet o-- Hygiene
+
+Locale <-- Vaccine  
+PetType <-- Pet  
+HygieneCategory <-- Hygiene  
+@enduml
