@@ -29,7 +29,7 @@ class Pet{
   -name: string
   -type: PetType
   -birthday: Date
-  -gender: Gender
+  -gender: GenderEnum
   -tags: Tag[]
   -vaccines: Vaccine[]
   -allergies: Allergy[]

@@ -1,9 +1,16 @@
-interface PetInfo {
+import { Allergy } from "./allergy";
+import { GenderEnum } from "./gender_enum";
+import { Hygiene } from "./hygiene";
+import { PetType } from "./pet_type";
+import { Tag } from "./tag";
+import { Vaccine } from "./vaccine";
+
+export interface Pet {
   id: number;
   name: string;
   type: PetType;
   birthday: Date;
-  gender: Gender;
+  gender: GenderEnum;
   tags: Tag[];
   vaccines: Vaccine[];
   allergies: Allergy[];
@@ -12,9 +19,3 @@ interface PetInfo {
   createdAt: Date;
   updatedAt: Date;
 }
-
-export class Pet {
-  constructor(public data: PetInfo) {}
-}
-
-const pet = new Pet({});
