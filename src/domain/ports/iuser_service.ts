@@ -1,7 +1,7 @@
 import { User } from '../entities/user'
+import { UserAuthentication } from '../entities/user_authentication'
 
-interface IUserRepository {
-    login(username: string, password: string): UserAuthenticated;
-    create(newUser: User): boolean;
-    
+export interface IUserService {
+    create(newUser: User): Promise<User | undefined>;
+    login(user: UserAuthentication): Promise<UserAuthentication | undefined>;
 }
