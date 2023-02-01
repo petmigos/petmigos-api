@@ -16,6 +16,7 @@ UsersRouter.post(
             const createdUser = await createUser.execute(newUser);
             return response.status(200).json(createdUser);
         } catch (error) {
+            console.log(error)
             return response.status(400).json({
                 status: 400,
                 message: error || "User was not created.",
