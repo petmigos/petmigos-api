@@ -1,9 +1,11 @@
-import { HygieneCategory } from "./hygiene_category";
+import { Pet } from "./pet";
 
 export interface Hygiene {
   _id?: string;
-  category: HygieneCategory;
+  category: string;
   description: string;
+  date: Date;
+  pet?: Pet;
   createdAt: Date;
   updateddAt: Date;
 }

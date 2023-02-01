@@ -14,10 +14,10 @@ PetsRouter.post(
       const createPet = new Create(new PetService());
       const createdPet = await createPet.execute(newPet);
       return response.status(200).json(createdPet);
-    } catch (error) {
+    } catch (error: any) {
       return response.status(400).json({
         status: 400,
-        message: error || "Pet was not created.",
+        message: error?.message || "Pet was not created.",
         date: new Date(),
       });
     }
@@ -29,10 +29,10 @@ PetsRouter.get("/pets", async (request, response) => {
     const findAll = new FindAll(new PetService());
     const allPets = await findAll.execute();
     return response.status(200).json(allPets);
-  } catch (error) {
+  } catch (error: any) {
     return response.status(400).json({
       status: 400,
-      message: error || "There is no pet registered.",
+      message: error?.message || "There is no pet registered.",
       date: new Date(),
     });
   }

@@ -1,6 +1,6 @@
 import { Vaccine } from "../entities/vaccine";
 
 export interface IVaccineService {
-  create(newVaccine: Vaccine, petId: number): Promise<Vaccine | undefined>;
-  fetchAll(): Promise<Vaccine[]>;
+  create(newVaccine: Vaccine, petId: string): Promise<Vaccine | undefined>;
+  fetchAll(petId: string): Promise<Vaccine[]>;
 }
