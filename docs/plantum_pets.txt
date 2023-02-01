@@ -6,18 +6,6 @@ enum GenderEnum{
   FEMALE
 }
 
-class Tag{
-  -name: string
-  ---
-  // getters/setters
-}
-
-class PetType{
-  -name: string
-  ---
-  // getters/setters
-}
-
 class HygieneCategory{
   -name: string
   ---
@@ -27,10 +15,10 @@ class HygieneCategory{
 class Pet{
   -id: number
   -name: string
-  -type: PetType
+  -type: string
   -birthday: Date
   -gender: GenderEnum
-  -tags: Tag[]
+  -tags: string[]
   -vaccines: Vaccine[]
   -allergies: Allergy[]
   -hygienes: Hygiene[]
@@ -86,12 +74,10 @@ class Hygiene{
 
 GenderEnum <-- Pet
 RiskEnum <-- Allergy
-Pet o-- Tag
 Pet o-- Vaccine
 Pet o-- Allergy
 Pet o-- Hygiene
 
 Locale <-- Vaccine  
-PetType <-- Pet  
 HygieneCategory <-- Hygiene  
 @enduml

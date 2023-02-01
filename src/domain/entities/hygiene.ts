@@ -1,7 +1,7 @@
 import { HygieneCategory } from "./hygiene_category";
 
 export interface Hygiene {
-  id?: number;
+  _id?: string;
   category: HygieneCategory;
   description: string;
   createdAt: Date;

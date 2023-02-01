@@ -1,7 +1,7 @@
 import { Locale } from "./locale";
 
 export interface Vaccine {
-  id?: number;
+  _id?: string;
   name: string;
   locale: Locale;
   applied: boolean;
