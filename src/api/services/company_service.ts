@@ -16,7 +16,7 @@ const CompanySchema = new mongoose.Schema<Company>(
     { timestamps: true }
 );
 
-const CompanyModel = mongoose.model<Company>("Company", CompanySchema);
+export const CompanyModel = mongoose.model<Company>("Company", CompanySchema);
 
 export class CompanyService implements ICompanyService {
 
@@ -37,11 +37,4 @@ export class CompanyService implements ICompanyService {
         const createdCompany = await CompanyModel.create(newCompany);
         return createdCompany;
     }
-
-    async fetchAll(): Promise<Company[]> {
-        const isConnected = await this.connect(process.env.DB_URL);
-        if (!isConnected) return [];
-             const allCompanies = await CompanyModel.find<Company>({});
-             return allCompanies;
-     }
 }

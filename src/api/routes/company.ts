@@ -1,12 +1,11 @@
 import { Request, Router } from "express";
 import { Company } from "../../domain/entities/Company";
 import { Create } from "../../domain/useCases/company/Create";
-import { CompanyService } from "../services/company_service";
+import { CompanyService, CompanyModel } from "../services/company_service";
 
 export const CompanyRouter = Router();
 
-CompanyRouter.post(
-    "/company",
+CompanyRouter.post("/company",
     async (request: Request<{}, {}, Company, {}>, response) => {
         const { body: newCompany } = request;
         try {
@@ -23,3 +22,12 @@ CompanyRouter.post(
         }
     }
 );
+
+CompanyRouter.get('/company', async (req, res) => {
+    try {
+      const companies = await CompanyModel.find();
+      res.json(companies);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
