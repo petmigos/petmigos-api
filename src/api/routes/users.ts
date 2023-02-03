@@ -15,11 +15,11 @@ UsersRouter.post(
             const createUser = new Create(new UserService());
             const createdUser = await createUser.execute(newUser);
             return response.status(200).json(createdUser);
-        } catch (error) {
+        } catch (error: any) {
             console.log(error)
             return response.status(400).json({
                 status: 400,
-                message: error || "User was not created.",
+                message: error?.message || "User was not created.",
                 date: new Date(),
             });
         }

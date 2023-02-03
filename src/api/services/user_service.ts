@@ -21,10 +21,11 @@ const UserAuthenticationSchema = new mongoose.Schema<UserAuthentication>(
 );
 
 const UserModel = mongoose.model<User>("User", UserSchema);
-const UserAuthenticationModel = mongoose.model<UserAuthentication>("UserAuthentication", UserSchema);
+const UserAuthenticationModel = mongoose.model<UserAuthentication>("UserAuthentication", UserAuthenticationSchema);
 
 export class UserService implements IUserService {
 
+    
     private async connect(dbURL?: string): Promise<boolean> {
         if (!dbURL) return false;
         try {
@@ -36,6 +37,14 @@ export class UserService implements IUserService {
         }
     }
 
+    async findByEmail(email: string): Promise<User | undefined> {
+        const isConnected = await this.connect(process.env.DB_URL);
+        if (!isConnected) throw new Error("Database was not connected.");
+        const foundUser = await UserModel.findOne({emailUser: email});
+        if(foundUser == null) return undefined;
+        return foundUser;
+    }
+    
     async create(newUser: User): Promise<User | undefined> {
         const isConnected = await this.connect(process.env.DB_URL);
         if (!isConnected) throw new Error("Database was not connected.");
@@ -46,14 +55,7 @@ export class UserService implements IUserService {
     async login(user: UserAuthentication): Promise<UserAuthentication | undefined> {
         const isConnected = await this.connect(process.env.DB_URL);
         if (!isConnected) throw new Error("Database was not connected.");
-        const createdUser = await UserModel.create(user);
+        const createdUser = await UserAuthenticationModel.create(user);
         return createdUser;
     }
-
-    // async fetchAll(): Promise<Pet[]> {
-    //     const isConnected = await this.connect(process.env.DB_URL);
-    //     if (!isConnected) return [];
-    //     const allPets = await PetModel.find<Pet>({});
-    //     return allPets;
-    // }
 }
