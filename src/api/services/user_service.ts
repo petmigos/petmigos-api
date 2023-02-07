@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { User } from "../../domain/entities/user";
 import { IUserService } from "../../domain/ports/iuser_service";
 import { UserAuthentication } from "../../domain/entities/user_authentication";
+import { Company } from "../../domain/entities/Company";
 
 const UserSchema = new mongoose.Schema<User>(
     {
@@ -12,6 +13,16 @@ const UserSchema = new mongoose.Schema<User>(
     { timestamps: true }
 );
 
+const CompanySchema = new mongoose.Schema<Company>(
+    {
+        name: String,
+        email: String,
+        password: String,
+    },
+    { timestamps: true }
+);
+
+
 const UserAuthenticationSchema = new mongoose.Schema<UserAuthentication>(
     {
         nameUser: String,
@@ -21,11 +32,12 @@ const UserAuthenticationSchema = new mongoose.Schema<UserAuthentication>(
 );
 
 const UserModel = mongoose.model<User>("User", UserSchema);
+const CompanyModel = mongoose.model<Company>("Company", CompanySchema);
 const UserAuthenticationModel = mongoose.model<UserAuthentication>("UserAuthentication", UserAuthenticationSchema);
 
 export class UserService implements IUserService {
 
-    
+
     private async connect(dbURL?: string): Promise<boolean> {
         if (!dbURL) return false;
         try {
@@ -40,11 +52,11 @@ export class UserService implements IUserService {
     async findByEmail(email: string): Promise<User | undefined> {
         const isConnected = await this.connect(process.env.DB_URL);
         if (!isConnected) throw new Error("Database was not connected.");
-        const foundUser = await UserModel.findOne({emailUser: email});
-        if(foundUser == null) return undefined;
+        const foundUser = await UserModel.findOne({ emailUser: email });
+        if (foundUser == null) return undefined;
         return foundUser;
     }
-    
+
     async create(newUser: User): Promise<User | undefined> {
         const isConnected = await this.connect(process.env.DB_URL);
         if (!isConnected) throw new Error("Database was not connected.");
@@ -56,7 +68,11 @@ export class UserService implements IUserService {
         const isConnected = await this.connect(process.env.DB_URL);
         if (!isConnected) throw new Error("Database was not connected.");
         const createdUser = await UserModel.findOne(user);
-        if (createdUser == undefined) return undefined;
+        if (createdUser == undefined) {
+            const createdUser = await CompanyModel.findOne(user);
+            if (createdUser == undefined) return undefined;
+            else return createdUser;
+        }
         else return createdUser;
     }
 }
