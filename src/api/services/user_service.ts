@@ -55,7 +55,7 @@ export class UserService implements IUserService {
     async login(user: UserAuthentication): Promise<UserAuthentication | undefined> {
         const isConnected = await this.connect(process.env.DB_URL);
         if (!isConnected) throw new Error("Database was not connected.");
-        const createdUser = await UserAuthenticationModel.findOne(user);
+        const createdUser = await UserModel.findOne(user);
         if (createdUser == undefined) return undefined;
         else return createdUser;
     }
