@@ -1,5 +1,5 @@
 export enum RiskEnum {
-  LOW,
-  MODERATE,
-  HIGH,
+  LOW = "Low",
+  MODERATE = "Moderate",
+  HIGH = "High",
 }
