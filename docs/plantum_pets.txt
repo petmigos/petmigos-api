@@ -6,12 +6,6 @@ enum GenderEnum{
   FEMALE
 }
 
-class HygieneCategory{
-  -name: string
-  ---
-  // getters/setters
-}
-
 class Pet{
   -id: number
   -name: string
@@ -64,7 +58,7 @@ class Allergy{
 
 class Hygiene{
   -id: number
-  -category: HygieneCategory
+  -category: string
   -description: string
   -createdAt: Date
   -updatedAt: Date
@@ -79,5 +73,4 @@ Pet o-- Allergy
 Pet o-- Hygiene
 
 Locale <-- Vaccine  
-HygieneCategory <-- Hygiene  
 @enduml
