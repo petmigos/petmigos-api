@@ -42,10 +42,24 @@ export class CompanyService implements ICompanyService {
         return foundCompany;
     }
 
+    async findByPassword(password: string): Promise<Company | null> {
+        const isConnected = await this.connect(process.env.DB_URL);
+        if (!isConnected) throw new Error("Database was not connected.");
+        const foundCompany = await CompanyModel.findOne({ password: password })
+        return foundCompany;
+    }
+
     async findByCNPJ(cnpj: string): Promise<Company | null> {
         const isConnected = await this.connect(process.env.DB_URL);
         if (!isConnected) throw new Error("Database was not connected.");
         const foundCompany = await CompanyModel.findOne({ cnpj: cnpj });
+        return foundCompany;
+    }
+
+    async findCompany(email: string, password: string): Promise<Company | null> {
+        const isConnected = await this.connect(process.env.DB_URL);
+        if (!isConnected) throw new Error("Database was not connected.");
+        const foundCompany = await CompanyModel.findOne({ email: email, password: password })
         return foundCompany;
     }
 
@@ -54,14 +68,6 @@ export class CompanyService implements ICompanyService {
         if (!isConnected) throw new Error("Database was not connected.");
         const createdCompany = await CompanyModel.create(newCompany);
         return createdCompany;
-    }
-
-    async findByEmailAndPassword(email: string, password: string): Promise<Company | undefined> {
-        const isConnected = await this.connect(process.env.DB_URL);
-        if (!isConnected) throw new Error("Database was not connected.");
-        const foundUser = await CompanyModel.findOne({ email: email, password: password });
-        if (foundUser == undefined) return undefined;
-        else return foundUser;
     }
 
 }

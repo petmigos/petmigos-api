@@ -28,11 +28,24 @@ export class UserService implements IUserService {
         }
     }
 
-    async findByEmail(email: string): Promise<User | undefined> {
+    async findByEmail(email: string): Promise<User | null> {
         const isConnected = await this.connect(process.env.DB_URL);
         if (!isConnected) throw new Error("Database was not connected.");
-        const foundUser = await UserModel.findOne({ emailUser: email });
-        if (foundUser == null) return undefined;
+        const foundUser = await UserModel.findOne({ email: email });
+        return foundUser;
+    }
+
+    async findByPassword(password: string): Promise<User | null> {
+        const isConnected = await this.connect(process.env.DB_URL);
+        if (!isConnected) throw new Error("Database was not connected.");
+        const foundUser = await UserModel.findOne({ password: password })
+        return foundUser;
+    }
+
+    async findUser(email: string, password: string): Promise<User | null> {
+        const isConnected = await this.connect(process.env.DB_URL);
+        if (!isConnected) throw new Error("Database was not connected.");
+        const foundUser = await UserModel.findOne({ email: email, password: password })
         return foundUser;
     }
 
@@ -41,14 +54,6 @@ export class UserService implements IUserService {
         if (!isConnected) throw new Error("Database was not connected.");
         const createdUser = await UserModel.create(newUser);
         return createdUser;
-    }
-
-    async findByEmailAndPassword(email: string, password: string): Promise<User | undefined> {
-        const isConnected = await this.connect(process.env.DB_URL);
-        if (!isConnected) throw new Error("Database was not connected.");
-        const foundUser = await UserModel.findOne({email: email, password: password});
-        if (foundUser == undefined) return undefined;
-        else return foundUser;
     }
 }
 

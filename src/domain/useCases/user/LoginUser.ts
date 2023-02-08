@@ -8,9 +8,9 @@ export class LoginUser {
     async execute(userAuthentication: UserAuthentication): Promise<User | undefined> {
 
         const {email, password} = userAuthentication;
-        const loggedUser = await this.userService.findByEmailAndPassword(email, password);
-
-        if (loggedUser != undefined) return loggedUser;
+        const user = await this.userService.findUser(email, password);
+        console.log(user)
+        if (user) return user;
         else throw new Error("Nome de usuário ou login inválido");
         
     }

@@ -1,4 +1,5 @@
 export interface Company{
+        _id?: string,
         cnpj: string,
         category: string,
         name: string,
