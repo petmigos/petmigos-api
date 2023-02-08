@@ -1,15 +1,14 @@
 import { Request, Router } from "express";
 import { User } from "../../domain/entities/user";
 import { Create } from "../../domain/useCases/user/Create";
-import { Login } from "../../domain/useCases/user/Login"
+import { LoginUser } from "../../domain/useCases/user/LoginUser"
 import { UserService } from "../services/user_service";
 import { UserAuthentication } from "../../domain/entities/user_authentication";
-import { CompanyService } from "../services/company_service";
 
 export const UsersRouter = Router();
 
 UsersRouter.post(
-    "/cadastro",
+    "/cadastroUser",
     async (request: Request<{}, {}, User, {}>, response) => {
         const { body: newUser } = request;
         try {
@@ -28,11 +27,11 @@ UsersRouter.post(
 );
 
 UsersRouter.post(
-    "/login",
+    "/loginUser",
     async (request: Request<{}, {}, UserAuthentication, {}>, response) => {
         const { body: user } = request;
         try {
-            const loginUser = new Login(new UserService(), new CompanyService());
+            const loginUser = new LoginUser(new UserService());
             const loggedUser = await loginUser.execute(user);
             return response.status(200).json(loggedUser);
         } catch (error: any) {

@@ -1,4 +1,3 @@
-
 export interface Company{
         cnpj: string,
         category: string,
