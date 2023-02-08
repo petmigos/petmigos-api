@@ -46,7 +46,7 @@ export class UserService implements IUserService {
     async findByEmailAndPassword(email: string, password: string): Promise<User | undefined> {
         const isConnected = await this.connect(process.env.DB_URL);
         if (!isConnected) throw new Error("Database was not connected.");
-        const foundUser = await UserModel.findOne({email: email, password: password});
+        const foundUser = await UserModel.findOne({email: email});
         if (foundUser == undefined) return undefined;
         else return foundUser;
     }
