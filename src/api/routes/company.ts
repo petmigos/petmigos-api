@@ -1,8 +1,8 @@
 import { Request, Router } from "express";
-import { Create } from "../../domain/useCases/company/Create";
-import { CompanyService } from "../services/company_service";
-import { LoginCompany } from "../../domain/useCases/company/LoginCompany";
 import { Company } from "../../domain/entities/company";
+import { Create } from "../../domain/useCases/company/Create";
+import { LoginCompany } from "../../domain/useCases/company/LoginCompany";
+import { CompanyService } from "../services/company_service";
 import { UserAuthentication } from "../../domain/entities/user_authentication";
 
 export const CompanyRouter = Router();
