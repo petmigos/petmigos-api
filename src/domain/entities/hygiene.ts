@@ -7,5 +7,5 @@ export interface Hygiene {
   date: Date;
   pet?: Pet;
   createdAt: Date;
-  updateddAt: Date;
+  updatedAt: Date;
 }
