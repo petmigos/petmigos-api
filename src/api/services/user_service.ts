@@ -1,19 +1,8 @@
 import mongoose from "mongoose";
 import { User } from "../../domain/entities/user";
 import { IUserService } from "../../domain/ports/iuser_service";
-import { UserAuthentication } from "../../domain/entities/user_authentication";
-import { Company } from "../../domain/entities/Company";
 
 const UserSchema = new mongoose.Schema<User>(
-    {
-        nameUser: String,
-        emailUser: String,
-        passwordUser: String,
-    },
-    { timestamps: true }
-);
-
-const CompanySchema = new mongoose.Schema<Company>(
     {
         name: String,
         email: String,
@@ -23,17 +12,7 @@ const CompanySchema = new mongoose.Schema<Company>(
 );
 
 
-const UserAuthenticationSchema = new mongoose.Schema<UserAuthentication>(
-    {
-        nameUser: String,
-        passwordUser: String,
-    },
-    { timestamps: true }
-);
-
 const UserModel = mongoose.model<User>("User", UserSchema);
-const CompanyModel = mongoose.model<Company>("Company", CompanySchema);
-const UserAuthenticationModel = mongoose.model<UserAuthentication>("UserAuthentication", UserAuthenticationSchema);
 
 export class UserService implements IUserService {
 
@@ -64,15 +43,20 @@ export class UserService implements IUserService {
         return createdUser;
     }
 
-    async login(user: UserAuthentication): Promise<UserAuthentication | undefined> {
+    // async login(user: UserAuthentication): Promise<UserAuthentication | Company | undefined> {
+    //     const isConnected = await this.connect(process.env.DB_URL);
+    //     if (!isConnected) throw new Error("Database was not connected.");
+    //     const createdUser = await UserModel.findOne(user);
+    //     if (createdUser == undefined) return undefined;
+    //     else return createdUser;
+    // }
+
+    async findByEmailAndPassword(email: string, password: string): Promise<User | undefined> {
         const isConnected = await this.connect(process.env.DB_URL);
         if (!isConnected) throw new Error("Database was not connected.");
-        const createdUser = await UserModel.findOne(user);
-        if (createdUser == undefined) {
-            const createdUser = await CompanyModel.findOne(user);
-            if (createdUser == undefined) return undefined;
-            else return createdUser;
-        }
-        else return createdUser;
+        const foundUser = await UserModel.findOne({email: email, password: password});
+        if (foundUser == undefined) return undefined;
+        else return foundUser;
     }
 }
+

@@ -4,6 +4,7 @@ import { Create } from "../../domain/useCases/user/Create";
 import { Login } from "../../domain/useCases/user/Login"
 import { UserService } from "../services/user_service";
 import { UserAuthentication } from "../../domain/entities/user_authentication";
+import { CompanyService } from "../services/company_service";
 
 export const UsersRouter = Router();
 
@@ -31,13 +32,13 @@ UsersRouter.post(
     async (request: Request<{}, {}, UserAuthentication, {}>, response) => {
         const { body: user } = request;
         try {
-            const loginUser = new Login(new UserService());
+            const loginUser = new Login(new UserService(), new CompanyService());
             const loggedUser = await loginUser.execute(user);
             return response.status(200).json(loggedUser);
-        } catch (error) {
+        } catch (error: any) {
             return response.status(400).json({
                 status: 400,
-                message: error || "User was not logged",
+                message: error?.message || "User was not logged",
                 date: new Date(),
             });
         }

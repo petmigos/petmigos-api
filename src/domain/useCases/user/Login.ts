@@ -1,16 +1,22 @@
+import { Company } from "../../entities/Company";
+import { User } from "../../entities/user";
 import { UserAuthentication } from "../../entities/user_authentication";
+import { ICompanyService } from "../../ports/icompany_service";
 import { IUserService } from "../../ports/iuser_service";
 
 export class Login {
-    constructor(private readonly userService: IUserService) { }
+    constructor(private readonly userService: IUserService, private readonly companyService: ICompanyService) { }
 
-    async execute(UserAuthentication: UserAuthentication): Promise<UserAuthentication | undefined> {
-        const log_user = await this.userService.login(UserAuthentication);
+    async execute(userAuthentication: UserAuthentication): Promise<User | Company | undefined> {
 
-        if(log_user != undefined) {
-            return this.userService.login(UserAuthentication)
-        }
+        const {email, password} = userAuthentication;
+        const loggedUser = await this.userService.findByEmailAndPassword(email, password);
+        const loggedCompany = await this.companyService.findByEmailAndPassword(email, password);
+
+        if (loggedCompany != undefined)  return loggedCompany;
+        else if (loggedUser != undefined) return loggedUser;
+        else throw new Error("Nome de usuário ou login inválido");
         
-        throw new Error("Nome de usuário ou login inválido");
     }
 }
+
