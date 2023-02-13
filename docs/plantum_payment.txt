@@ -1,0 +1,54 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+enum ProductCategoryEnum{
+    ACESSORIO
+    BANHO_E_TOSA
+    CONSULTAS
+    PADRINHOS
+    ALIMENTACAO
+    EXAMES
+    ADESTRAMENTO
+}
+
+enum PaymentType{
+    CREDIT_CARD
+    DEBIT_CARD
+    PIX
+}
+
+class Product{
+    -id: string
+    -name: string
+    -unitPrice: float
+    -image: Image
+    -description: string
+    -category: ItemCategoryEnum
+    -createdAt: Date
+    -updatedAt: Date
+}
+
+class Purchase{
+    -product: Product
+    -user: User
+    -transactionCode: number
+    -payment: Payment
+    -quantity: number
+    -totalPrice: float
+    -createdAt: Date
+    -updatedAt: Date
+}
+
+class Payment {
+    -id: string
+    -type: PaymentType
+}
+
+Company o-- Product
+Product --> ProductCategoryEnum
+Purchase --> User
+Purchase --> Product
+Purchase --> Payment
+Payment --> PaymentType
+
+@enduml
