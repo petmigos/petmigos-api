@@ -17,7 +17,7 @@ AllergiesRouter.get(
     } catch (error: any) {
       return response.status(400).json({
         status: 400,
-        message: error?.message || "There is no allergies registered.",
+        message: error?.message || "There are no allergies registered.",
         date: new Date(),
       });
     }

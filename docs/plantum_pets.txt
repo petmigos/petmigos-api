@@ -7,7 +7,7 @@ enum GenderEnum{
 }
 
 class Pet{
-  -id: number
+  -_id: number
   -name: string
   -type: string
   -birthday: Date
@@ -30,7 +30,7 @@ class Locale{
 }
 
 class Vaccine{
-  -id: number
+  -_id: number
   -name: string
   -locale: Locale
   -applied: boolean
@@ -47,7 +47,7 @@ enum RiskEnum{
 }
 
 class Allergy{
-  -id: number
+  -_id: number
   -name: string
   -risk: RiskEnum
   -createdAt: Date
@@ -57,7 +57,7 @@ class Allergy{
 }
 
 class Hygiene{
-  -id: number
+  -_id: number
   -category: string
   -description: string
   -createdAt: Date

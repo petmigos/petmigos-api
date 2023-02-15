@@ -17,7 +17,7 @@ HygienesRouter.get(
     } catch (error: any) {
       return response.status(400).json({
         status: 400,
-        message: error?.message || "There is no hygienes registered.",
+        message: error?.message || "There are no hygienes registered.",
         date: new Date(),
       });
     }

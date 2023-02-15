@@ -17,7 +17,7 @@ VaccinesRouter.get(
     } catch (error: any) {
       return response.status(400).json({
         status: 400,
-        message: error?.message || "There is no vaccines registered.",
+        message: error?.message || "There are no vaccines registered.",
         date: new Date(),
       });
     }
