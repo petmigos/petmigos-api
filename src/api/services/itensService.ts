@@ -8,7 +8,7 @@ const ItemSchema = new mongoose.Schema<Item>(
         description: String,
         price: Number,
         category: String,
-
+        image: String
     },
     { timestamps: true }
 );
