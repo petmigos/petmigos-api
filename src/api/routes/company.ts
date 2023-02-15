@@ -1,5 +1,5 @@
 import { Request, Router } from "express";
-import { Company } from "../../domain/entities/Company";
+import { Company } from "../../domain/entities/company";
 import { Create } from "../../domain/useCases/company/Create";
 import { LoginCompany } from "../../domain/useCases/company/LoginCompany";
 import { CompanyService } from "../services/company_service";
@@ -42,3 +42,17 @@ CompanyRouter.post(
         }
     }
 );
+
+CompanyRouter.get("/companies", async (request, response) => {
+    try {
+      const companyService = new CompanyService();
+      const companies = await companyService.getAllCompanies();
+      return response.status(200).json(companies);
+    } catch (error: any) {
+      return response.status(500).json({
+        status: 500,
+        message: error?.message || "Failed to retrieve companies",
+        date: new Date(),
+      });
+    }
+  });
