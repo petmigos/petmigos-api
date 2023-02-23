@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Company } from "../../domain/entities/Company";
+import { Company } from "../../domain/entities/company";
 import { ICompanyService } from "../../domain/ports/icompany_service";
 
 const CompanySchema = new mongoose.Schema<Company>(
@@ -69,5 +69,12 @@ export class CompanyService implements ICompanyService {
         const createdCompany = await CompanyModel.create(newCompany);
         return createdCompany;
     }
+
+    async getAllCompanies(): Promise<Company[]> {
+        const isConnected = await this.connect(process.env.DB_URL);
+        if (!isConnected) throw new Error("Database was not connected.");
+        const companies = await CompanyModel.find();
+        return companies;
+      }
 
 }
