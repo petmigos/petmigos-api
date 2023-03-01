@@ -1,7 +1,13 @@
+import { Company } from "./company";
+
 export interface Item {
-    title: string,
-    description: string,
-    price: number,
-    category: string,
-    image : String
+  _id?: string;
+  title: string;
+  description: string;
+  price: number;
+  category: string;
+  image: string;
+  company?: Company;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

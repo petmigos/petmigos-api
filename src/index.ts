@@ -1,16 +1,15 @@
 require("dotenv").config();
 import express from "express";
 import { AllergiesRouter } from "./api/routes/allergies";
-import { HygienesRouter } from "./api/routes/hygienes";
-import { PetsRouter } from "./api/routes/pets";
-import { VaccinesRouter } from "./api/routes/vaccines";
-import { UsersRouter } from "./api/routes/users";
 import { CompanyRouter } from "./api/routes/company";
-import { ItensRouter } from "./api/routes/itens";
-
+import { HygienesRouter } from "./api/routes/hygienes";
+import { ItensRouter } from "./api/routes/items";
+import { PetsRouter } from "./api/routes/pets";
+import { UsersRouter } from "./api/routes/users";
+import { VaccinesRouter } from "./api/routes/vaccines";
 
 const port = process.env.PORT || 3333;
-const app = express();
+export const app = express();
 
 app.use(express.json());
 app.use(PetsRouter);
@@ -21,7 +20,6 @@ app.use(UsersRouter);
 app.use(CompanyRouter);
 app.use(ItensRouter);
 
-
 app.listen(port, () => {
-    console.log(`API running on port: ${port}`);
-  });
+  console.log(`API running on port: ${port}`);
+});
