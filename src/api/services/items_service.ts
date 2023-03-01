@@ -41,7 +41,10 @@ export class ItemService implements IItemService {
   async findById(companyId: string, id: string): Promise<Item | undefined> {
     const isConnected = await this.connect(process.env.DB_URL);
     if (!isConnected) throw new Error("Database was not connected.");
-    const foundItem = await ItemModel.findOne({ company: companyId, _id: id });
+    const foundItem = await ItemModel.findOne({
+      company: companyId,
+      _id: id,
+    }).populate("company");
     if (foundItem === null) return undefined;
     return foundItem;
   }
@@ -49,7 +52,9 @@ export class ItemService implements IItemService {
   async fetchAll(companyId: string): Promise<Item[]> {
     const isConnected = await this.connect(process.env.DB_URL);
     if (!isConnected) throw new Error("Database was not connected.");
-    const allItems = await ItemModel.find({ company: companyId });
+    const allItems = await ItemModel.find({ company: companyId }).populate(
+      "company"
+    );
     return allItems;
   }
 }
