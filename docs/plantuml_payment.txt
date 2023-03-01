@@ -1,0 +1,45 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+enum PaymentTypeEnum{
+    CREDIT_CARD
+    DEBIT_CARD
+    PIX
+}
+
+enum PurchaseStatusEnum{
+    PENDING
+    PAID
+    CANCELED
+}
+
+class Purchase{
+    -_id: string
+    -item: Item
+    -user: User
+    -transactionCode: string
+    -payment: Payment
+    -quantity: number
+    -totalPrice: number
+    -status: PurchaseStatusEnum
+    -createdAt: Date
+    -updatedAt: Date
+    ---
+    // getters/setters
+}
+
+class Payment {
+    -type: PaymentTypeEnum
+    -country: string
+    ---
+    // getters/setters
+}
+
+Company o-- Item
+Purchase --> User
+Purchase --> Item
+Purchase --> PurchaseStatusEnum
+Purchase --> Payment
+Payment --> PaymentTypeEnum
+
+@enduml
