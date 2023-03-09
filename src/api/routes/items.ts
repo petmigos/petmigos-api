@@ -12,6 +12,7 @@ ItensRouter.post(
   async (request: Request<{ companyId: string }, {}, Item, {}>, response) => {
     const { body: item } = request;
     const { companyId } = request.params;
+    console.log("Teste");
     try {
       const create = new Create(new ItemService());
       const registeredItem = await create.execute(item, companyId);
