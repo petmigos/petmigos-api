@@ -8,8 +8,9 @@ const ItemSchema = new mongoose.Schema<Item>(
     description: String,
     price: Number,
     category: String,
+    quantity: Number,
     image: String,
-    company: { type: Schema.Types.ObjectId, ref: "Companies" },
+    company: { type: Schema.Types.ObjectId, ref: "companies" },
   },
   { timestamps: true }
 );
@@ -52,9 +53,7 @@ export class ItemService implements IItemService {
   async fetchAll(companyId: string): Promise<Item[]> {
     const isConnected = await this.connect(process.env.DB_URL);
     if (!isConnected) throw new Error("Database was not connected.");
-    const allItems = await ItemModel.find({ company: companyId }).populate(
-      "company"
-    );
+    const allItems = await ItemModel.find({ company: companyId });
     return allItems;
   }
 }
