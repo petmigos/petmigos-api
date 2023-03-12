@@ -4,6 +4,7 @@ import { Create } from "../../domain/useCases/items/Create";
 import { FetchAll } from "../../domain/useCases/items/FetchAll";
 import { FindById } from "../../domain/useCases/items/FindById";
 import { ItemService } from "../services/items_service";
+import { FetchAllByCompany } from "../../domain/useCases/items/FetchAllByCompany";
 
 export const ItensRouter = Router();
 
@@ -32,8 +33,25 @@ ItensRouter.get(
   async (request: Request<{ companyId: string }, {}, {}, {}>, response) => {
     const { companyId } = request.params;
     try {
+      const fetchAllByCompany = new FetchAllByCompany(new ItemService());
+      const allItems = await fetchAllByCompany.execute(companyId);
+      return response.status(200).json(allItems);
+    } catch (error: any) {
+      return response.status(400).json({
+        status: 400,
+        message: error?.message || "There are no items registered",
+        date: new Date(),
+      });
+    }
+  }
+);
+
+ItensRouter.get(
+  "/companies/items",
+  async (request, response) => {
+    try {
       const fetchAll = new FetchAll(new ItemService());
-      const allItems = await fetchAll.execute(companyId);
+      const allItems = await fetchAll.execute();
       return response.status(200).json(allItems);
     } catch (error: any) {
       return response.status(400).json({

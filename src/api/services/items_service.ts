@@ -45,15 +45,22 @@ export class ItemService implements IItemService {
     const foundItem = await ItemModel.findOne({
       company: companyId,
       _id: id,
-    }).populate("company");
+    });
     if (foundItem === null) return undefined;
     return foundItem;
   }
 
-  async fetchAll(companyId: string): Promise<Item[]> {
+  async fetchAllByCompany(companyId: string): Promise<Item[]> {
     const isConnected = await this.connect(process.env.DB_URL);
     if (!isConnected) throw new Error("Database was not connected.");
     const allItems = await ItemModel.find({ company: companyId });
+    return allItems;
+  }
+
+  async fetchAll(): Promise<Item[]> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const allItems = await ItemModel.find();
     return allItems;
   }
 }
