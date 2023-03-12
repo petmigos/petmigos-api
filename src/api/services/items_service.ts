@@ -63,4 +63,10 @@ export class ItemService implements IItemService {
     const allItems = await ItemModel.find();
     return allItems;
   }
+
+  async delete(id: string): Promise<void> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    await ItemModel.findByIdAndDelete({ _id: id });
+  }
 }

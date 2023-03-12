@@ -5,4 +5,5 @@ export interface IItemService {
   findById(companyId: string, id: string): Promise<Item | undefined>;
   fetchAllByCompany(companyId: string): Promise<Item[]>;
   fetchAll(): Promise<Item[]>;
+  delete(id: string): Promise<void>;
 }

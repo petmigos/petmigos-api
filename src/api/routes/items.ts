@@ -5,6 +5,7 @@ import { FetchAll } from "../../domain/useCases/items/FetchAll";
 import { FindById } from "../../domain/useCases/items/FindById";
 import { ItemService } from "../services/items_service";
 import { FetchAllByCompany } from "../../domain/useCases/items/FetchAllByCompany";
+import { Delete } from "../../domain/useCases/items/Delete";
 
 export const ItensRouter = Router();
 
@@ -78,6 +79,27 @@ ItensRouter.get(
       return response.status(400).json({
         status: 400,
         message: error?.message || "There are no items registered",
+        date: new Date(),
+      });
+    }
+  }
+);
+
+ItensRouter.delete(
+  "/companies/:companyId/items/:id",
+  async (
+    request: Request<{ companyId: string; id: string }, {}, {}, {}>,
+    response
+  ) => {
+    const { id } = request.params;
+    try {
+      const deletedItem = new Delete(new ItemService());
+      await deletedItem.execute(id);
+      return response.status(200).json({message: "Item sucessfully deleted"});
+    } catch (error: any) {
+      return response.status(400).json({
+        status: 400,
+        message: error?.message || "This item could not be deleted",
         date: new Date(),
       });
     }
