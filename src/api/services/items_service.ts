@@ -8,6 +8,7 @@ const ItemSchema = new mongoose.Schema<Item>(
     description: String,
     price: Number,
     category: String,
+    quantity: Number,
     image: String,
     company: { type: Schema.Types.ObjectId, ref: "Company" },
   },
@@ -38,7 +39,7 @@ export class ItemService implements IItemService {
     return createdItem;
   }
 
-  async findById(companyId: string, id: string): Promise<Item | undefined> {
+  async findByIdAndCompany(companyId: string, id: string): Promise<Item | undefined> {
     const isConnected = await this.connect(process.env.DB_URL);
     if (!isConnected) throw new Error("Database was not connected.");
     const foundItem = await ItemModel.findOne({
@@ -49,12 +50,35 @@ export class ItemService implements IItemService {
     return foundItem;
   }
 
-  async fetchAll(companyId: string): Promise<Item[]> {
+  async findById(id: string): Promise<Item | undefined> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const foundItem = await ItemModel.findOne({
+      _id: id,
+    }).populate("company");
+    if (foundItem === null) return undefined;
+    return foundItem;
+  }
+
+  async fetchAllByCompany(companyId: string): Promise<Item[]> {
     const isConnected = await this.connect(process.env.DB_URL);
     if (!isConnected) throw new Error("Database was not connected.");
     const allItems = await ItemModel.find({ company: companyId }).populate(
       "company"
     );
     return allItems;
+  }
+
+  async fetchAll(): Promise<Item[]> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const allItems = await ItemModel.find().populate("company");
+    return allItems;
+  }
+
+  async delete(id: string): Promise<void> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    await ItemModel.findByIdAndDelete({ _id: id });
   }
 }
