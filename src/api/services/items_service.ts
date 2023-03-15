@@ -9,7 +9,7 @@ const ItemSchema = new mongoose.Schema<Item>(
     price: Number,
     category: String,
     image: String,
-    company: { type: Schema.Types.ObjectId, ref: "Companies" },
+    company: { type: Schema.Types.ObjectId, ref: "Company" },
   },
   { timestamps: true }
 );
