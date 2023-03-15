@@ -3,33 +3,7 @@ import { Purchase, PurchaseResponse } from "../../domain/entities/purchase";
 import { IPaymentService } from "../../domain/ports/ipayment_service";
 import { api } from "./axios_adapter";
 
-interface PaygoItem {
-  quantity: number;
-  description: string;
-  unit_price: number;
-}
-
-interface PaygoPayment {
-  integration: {
-    reference: string;
-    notification_url: string;
-    project: number;
-  };
-  order: {
-    currency: "BRL";
-    items: PaygoItem[];
-  };
-  checkout: {
-    language: "pt_BR";
-    redirect_urls: {
-      success: string;
-    };
-  };
-  charge: {
-    country: "BR";
-    type: "CREDIT_CARD" | "DEBIT_CARD" | "PIX";
-  };
-}
+interface PaygoPayment {}
 
 export class PaymentService implements IPaymentService {
   async buy(
@@ -41,44 +15,11 @@ export class PaymentService implements IPaymentService {
     const paymentKey = process.env.PAYMENT_KEY;
     if (!paymentKey || !baseURL)
       throw new Error("Payment credencials not found.");
-    const encodingKey = Buffer.from(paymentKey).toString("base64");
-    const data: PaygoPayment = {
-      integration: {
-        reference: "PETMIGOS",
-        notification_url: "http://petmigos.shop/payments/notify",
-        project: 1,
-      },
-      checkout: {
-        language: "pt_BR",
-        redirect_urls: {
-          success: "http://petmigos.shop/payments/success",
-        },
-      },
-      order: {
-        currency: "BRL",
-        items: [
-          {
-            description:
-              newPurchase.item?.description || "Produto comprado na Petmigos",
-            quantity: newPurchase.quantity,
-            unit_price: newPurchase.item?.price || newPurchase.totalPrice,
-          },
-        ],
-      },
-      charge: {
-        country: "BR",
-        type: "DEBIT_CARD",
-      },
-    };
+    const data: PaygoPayment = {};
     try {
       const { data: response } = await api(baseURL).post<PurchaseResponse>(
-        "/v3/checkouts",
-        data,
-        {
-          headers: {
-            Authorization: `Basic ${encodingKey}`,
-          },
-        }
+        `v2/checkout?token=${paymentKey}`,
+        data
       );
       return response;
     } catch (error: any) {
@@ -88,7 +29,6 @@ export class PaymentService implements IPaymentService {
   }
 }
 
-// Formato de envio de pedido para a Payment API
 // {
 //   "reference_id": "ex-00001",
 //   "customer": {
@@ -110,13 +50,6 @@ export class PaymentService implements IPaymentService {
 //           "name": "nome do item",
 //           "quantity": 1,
 //           "unit_amount": 500
-//       }
-//   ],
-//   "qr_codes": [
-//       {
-//           "amount": {
-//               "value": 500
-//           }
 //       }
 //   ],
 //   "shipping": {

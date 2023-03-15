@@ -10,7 +10,7 @@ const ItemSchema = new mongoose.Schema<Item>(
     category: String,
     quantity: Number,
     image: String,
-    company: { type: Schema.Types.ObjectId, ref: "companies" },
+    company: { type: Schema.Types.ObjectId, ref: "Company" },
   },
   { timestamps: true }
 );
