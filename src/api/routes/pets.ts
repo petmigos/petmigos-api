@@ -7,12 +7,13 @@ import { PetService } from "../services/pet_service";
 export const PetsRouter = Router();
 
 PetsRouter.post(
-  "/pets",
-  async (request: Request<{}, {}, Pet, {}>, response) => {
+  "/cadastroUser/:ownerId/pets",
+  async (request: Request<{ ownerId: string}, {}, Pet, {}>, response) => {
     const { body: newPet } = request;
+    const { ownerId } = request.params
     try {
       const createPet = new Create(new PetService());
-      const createdPet = await createPet.execute(newPet);
+      const createdPet = await createPet.execute(newPet, ownerId);
       return response.status(200).json(createdPet);
     } catch (error: any) {
       return response.status(400).json({

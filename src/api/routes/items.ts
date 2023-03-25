@@ -10,6 +10,7 @@ import { FindById } from "../../domain/useCases/items/FindById";
 
 export const ItensRouter = Router();
 
+
 ItensRouter.post(
   "/companies/:companyId/items",
   async (request: Request<{ companyId: string }, {}, Item, {}>, response) => {
