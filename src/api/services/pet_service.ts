@@ -46,4 +46,14 @@ export class PetService implements IPetService {
     const allPets = await PetModel.find<Pet>({});
     return allPets;
   }
+
+  async findById(pet_id: string): Promise<Pet | undefined> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const foundPet = await PetModel.findOne({
+      _id: pet_id,
+    });
+    if (foundPet === null) return undefined;
+    return foundPet;
+  }
 }
