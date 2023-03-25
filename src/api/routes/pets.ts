@@ -9,7 +9,7 @@ export const PetsRouter = Router();
 
 PetsRouter.post(
   "/user/:userId/pets",
-  async (request: Request<{}, {}, Pet, {}>, response) => {
+  async (request: Request<{userId: string}, {}, Pet, {}>, response) => {
     const { body: newPet } = request;
     const { userId } = request.params
     try {
