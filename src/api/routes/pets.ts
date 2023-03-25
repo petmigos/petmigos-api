@@ -11,9 +11,10 @@ PetsRouter.post(
   "/user/:userId/pets",
   async (request: Request<{}, {}, Pet, {}>, response) => {
     const { body: newPet } = request;
+    const { userId } = request.params
     try {
       const createPet = new Create(new PetService());
-      const createdPet = await createPet.execute(newPet);
+      const createdPet = await createPet.execute(newPet, userId);
       return response.status(200).json(createdPet);
     } catch (error: any) {
       return response.status(400).json({

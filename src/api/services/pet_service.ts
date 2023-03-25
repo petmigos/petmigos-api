@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { GenderEnum } from "../../domain/entities/gender_enum";
 import { Pet } from "../../domain/entities/pet";
 import { IPetService } from "../../domain/ports/ipet_service";
@@ -8,13 +8,10 @@ const PetSchema = new mongoose.Schema<Pet>(
     name: String,
     type: String,
     birthday: Date,
-    gender: {
-      type: String,
-      default: GenderEnum.MALE,
-      enum: Object.values(GenderEnum),
-    },
+    gender: String,
     tags: [String],
-    imageURL: String,
+    image: String,
+    owner: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );
@@ -33,10 +30,13 @@ export class PetService implements IPetService {
     }
   }
 
-  async create(newPet: Pet): Promise<Pet | undefined> {
+  async create(newPet: Pet, ownerId: string): Promise<Pet | undefined> {
     const isConnected = await this.connect(process.env.DB_URL);
     if (!isConnected) throw new Error("Database was not connected.");
-    const createdPet = await PetModel.create(newPet);
+    const createdPet = await PetModel.create({
+      ...newPet,
+      owner: ownerId,
+    });
     return createdPet;
   }
 
