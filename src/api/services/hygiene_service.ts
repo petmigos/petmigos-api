@@ -44,4 +44,10 @@ export class HygieneService implements IHygieneService {
     }).populate("pet");
     return allHygienes;
   }
+
+  async delete(hygieneId: string): Promise<void> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    await HygieneModel.findByIdAndDelete({ _id: hygieneId });
+  }
 }

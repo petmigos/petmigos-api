@@ -48,4 +48,10 @@ export class AllergyService implements IAllergyService {
     }).populate("pet");
     return allAllergies;
   }
+
+  async delete(allegyid: string): Promise<void> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    await AllergyModel.findByIdAndDelete({ _id: allegyid });
+  }
 }

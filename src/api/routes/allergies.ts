@@ -3,6 +3,7 @@ import { Allergy } from "../../domain/entities/allergy";
 import { Create } from "../../domain/useCases/allergies/Create";
 import { FindAll } from "../../domain/useCases/allergies/FindAll";
 import { AllergyService } from "../services/allergy_service";
+import { DeleteAllergy } from "../../domain/useCases/allergies/DeleteAllergy";
 
 export const AllergiesRouter = Router();
 
@@ -38,6 +39,27 @@ AllergiesRouter.post(
       return response.status(400).json({
         status: 400,
         message: error?.message || "Allergy was not created.",
+        date: new Date(),
+      });
+    }
+  }
+);
+
+AllergiesRouter.delete(
+  "/pets/:petId/allergies/:allergyId",
+  async (
+    request: Request<{ petId: string; allergyId: string }, {}, {}, {}>,
+    response
+  ) => {
+    const { allergyId } = request.params;
+    try {
+      const deletedAllergy = new DeleteAllergy(new AllergyService());
+      await deletedAllergy.execute(allergyId);
+      return response.status(200).json({ message: "Item sucessfully deleted" });
+    } catch (error: any) {
+      return response.status(400).json({
+        status: 400,
+        message: error?.message || "This item could not be deleted",
         date: new Date(),
       });
     }
