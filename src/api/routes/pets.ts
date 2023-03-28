@@ -4,6 +4,7 @@ import { Create } from "../../domain/useCases/pets/Create";
 import { FindAll } from "../../domain/useCases/pets/FindAll";
 import { PetService } from "../services/pet_service";
 import { FindById } from "../../domain/useCases/pets/FindById";
+import { Update } from "../../domain/useCases/pets/Update";
 
 export const PetsRouter = Router();
 
@@ -57,5 +58,24 @@ PetsRouter.get(
         date: new Date(),
       });
     }
-  }
-);
+  },
+)
+
+  PetsRouter.post(
+    "/user/:userId/pets/:petId",
+    async (request: Request<{petId: string}, {}, Pet, {}>, response) => {
+      const { body: newPet } = request;
+      const { petId } = request.params
+      try {
+        const updatePet = new Update(new PetService());
+        const updatedPet = await updatePet.execute(petId, newPet);
+        return response.status(200).json(updatedPet);
+      } catch (error: any) {
+        return response.status(400).json({
+          status: 400,
+          message: error?.message || "Pet was not updated.",
+          date: new Date(),
+        });
+      }
+    }
+  )
