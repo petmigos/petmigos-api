@@ -4,6 +4,7 @@ import { Create } from "../../domain/useCases/allergies/Create";
 import { FindAll } from "../../domain/useCases/allergies/FindAll";
 import { AllergyService } from "../services/allergy_service";
 import { DeleteAllergy } from "../../domain/useCases/allergies/DeleteAllergy";
+import { Update } from "../../domain/useCases/allergies/Update";
 
 export const AllergiesRouter = Router();
 
@@ -44,6 +45,25 @@ AllergiesRouter.post(
     }
   }
 );
+
+AllergiesRouter.post(
+  "/pets/:petId/allergies/:allergyId",
+  async (request: Request<{allergyId: string}, {}, Allergy, {}>, response) => {
+    const { body: newAllergy } = request;
+    const { allergyId } = request.params
+    try {
+      const updateAllergy = new Update(new AllergyService());
+      const updatedAllergy = await updateAllergy.execute(allergyId, newAllergy);
+      return response.status(200).json(updatedAllergy);
+    } catch (error: any) {
+      return response.status(400).json({
+        status: 400,
+        message: error?.message || "Allergy was not updated.",
+        date: new Date(),
+      });
+    }
+  });
+
 
 AllergiesRouter.delete(
   "/pets/:petId/allergies/:allergyId",

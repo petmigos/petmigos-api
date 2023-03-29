@@ -4,6 +4,7 @@ import { Create } from "../../domain/useCases/vaccines/Create";
 import { FindAll } from "../../domain/useCases/vaccines/FindAll";
 import { VaccineService } from "../services/vaccine_service";
 import { DeleteVaccine } from "../../domain/useCases/vaccines/DeleteVaccine";
+import { Update } from "../../domain/useCases/vaccines/Update";
 
 export const VaccinesRouter = Router();
 
@@ -44,6 +45,24 @@ VaccinesRouter.post(
     }
   }
 );
+
+VaccinesRouter.post(
+  "/pets/:petId/vaccines/:vaccineId",
+  async (request: Request<{vaccineId: string}, {}, Vaccine, {}>, response) => {
+    const { body: newVaccine } = request;
+    const { vaccineId } = request.params
+    try {
+      const updateVaccine = new Update(new VaccineService());
+      const updatedVaccine = await updateVaccine.execute(vaccineId, newVaccine);
+      return response.status(200).json(updatedVaccine);
+    } catch (error: any) {
+      return response.status(400).json({
+        status: 400,
+        message: error?.message || "Vaccine was not updated.",
+        date: new Date(),
+      });
+    }
+  });
 
 VaccinesRouter.delete(
   "/pets/:petId/vaccines/:vaccineId",

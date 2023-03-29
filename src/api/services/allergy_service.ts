@@ -49,6 +49,19 @@ export class AllergyService implements IAllergyService {
     return allAllergies;
   }
 
+  async findByIdAndUpdate(
+    allergyId: string,
+    updatedAllergy: Allergy
+  ): Promise<Allergy | undefined> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const allergyUpdated = await AllergyModel.findByIdAndUpdate(allergyId, {
+      ...updatedAllergy,
+    });
+    if (allergyUpdated == null) return undefined;
+    return allergyUpdated;
+  }
+
   async delete(allegyid: string): Promise<void> {
     const isConnected = await this.connect(process.env.DB_URL);
     if (!isConnected) throw new Error("Database was not connected.");

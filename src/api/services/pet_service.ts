@@ -10,7 +10,6 @@ const PetSchema = new mongoose.Schema<Pet>(
     type: String,
     birthday: Date,
     gender: String,
-    tags: [String],
     image: String,
     owner: { type: Schema.Types.ObjectId, ref: "User" },
   },

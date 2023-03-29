@@ -4,6 +4,7 @@ import { Create } from "../../domain/useCases/hygienes/Create";
 import { FindAll } from "../../domain/useCases/hygienes/FindAll";
 import { HygieneService } from "../services/hygiene_service";
 import { DeleteHygiene } from "../../domain/useCases/hygienes/DeleteHygiene";
+import { Update } from "../../domain/useCases/hygienes/Update";
 
 export const HygienesRouter = Router();
 
@@ -39,6 +40,28 @@ HygienesRouter.post(
       return response.status(400).json({
         status: 400,
         message: error?.message || "Hygiene was not created.",
+        date: new Date(),
+      });
+    }
+  }
+);
+
+HygienesRouter.post(
+  "/pets/:petId/hygienes/:hygieneId",
+  async (
+    request: Request<{ hygieneId: string }, {}, Hygiene, {}>,
+    response
+  ) => {
+    const { body: newHygiene } = request;
+    const { hygieneId } = request.params;
+    try {
+      const updateHygiene = new Update(new HygieneService());
+      const updatedHygiene = await updateHygiene.execute(hygieneId, newHygiene);
+      return response.status(200).json(updatedHygiene);
+    } catch (error: any) {
+      return response.status(400).json({
+        status: 400,
+        message: error?.message || "Hygiene was not updated.",
         date: new Date(),
       });
     }

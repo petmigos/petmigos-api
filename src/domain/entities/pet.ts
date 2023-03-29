@@ -9,7 +9,6 @@ export interface Pet {
   type: string;
   birthday: Date;
   gender: string;
-  tags: string[];
   image: string;
   createdAt?: Date;
   updatedAt?: Date;
