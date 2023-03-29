@@ -1,12 +1,16 @@
 import { Request, Router } from "express";
 import { Item } from "../../domain/entities/Item";
+import { BuyItem } from "../../domain/useCases/items/BuyItem";
 import { Create } from "../../domain/useCases/items/Create";
-import { FetchAll } from "../../domain/useCases/items/FetchAll";
-import { FindByIdAndCompany } from "../../domain/useCases/items/FindByIdAndCompany";
-import { ItemService } from "../services/items_service";
-import { FetchAllByCompany } from "../../domain/useCases/items/FetchAllByCompany";
 import { Delete } from "../../domain/useCases/items/Delete";
+import { FetchAll } from "../../domain/useCases/items/FetchAll";
+import { FetchAllByCompany } from "../../domain/useCases/items/FetchAllByCompany";
 import { FindById } from "../../domain/useCases/items/FindById";
+import { FindByIdAndCompany } from "../../domain/useCases/items/FindByIdAndCompany";
+import { UpdateByTransactionCode } from "../../domain/useCases/items/UpdateByTransactionCode";
+import { CompanyService } from "../services/company_service";
+import { ItemService } from "../services/items_service";
+import { PaymentService } from "../services/payment_service";
 
 export const ItensRouter = Router();
 
@@ -24,6 +28,63 @@ ItensRouter.post(
       return response.status(400).json({
         status: 400,
         message: error?.message || "Item was not registered",
+        date: new Date(),
+      });
+    }
+  }
+);
+
+ItensRouter.post(
+  "/companies/:companyId/items/:itemId/buy",
+  async (
+    request: Request<
+      { companyId: string; itemId: string },
+      {},
+      { quantity: number; unit_price: number; title: string },
+      {}
+    >,
+    response
+  ) => {
+    const { body: item } = request;
+    const { companyId, itemId } = request.params;
+    try {
+      const buyItem = new BuyItem(new PaymentService(), new CompanyService());
+      const purchase = await buyItem.execute(
+        {
+          quantity: item.quantity,
+          unitPrice: item.unit_price,
+          title: item.title,
+        },
+        itemId,
+        companyId
+      );
+      return response.status(200).json(purchase);
+    } catch (error: any) {
+      return response.status(400).json({
+        status: 400,
+        message: error?.message || "Payment not found",
+        date: new Date(),
+      });
+    }
+  }
+);
+
+ItensRouter.post(
+  "/companies/items/update",
+  async (request: Request<{}, {}, {}, { internal_id: string }>, response) => {
+    const { internal_id } = request.query;
+    try {
+      const updateByTransactionCode = new UpdateByTransactionCode(
+        new PaymentService()
+      );
+      await updateByTransactionCode.execute(internal_id);
+      return response.status(200).json({
+        message: "Payment updated",
+      });
+    } catch (error: any) {
+      return response.status(400).json({
+        status: 400,
+        message: error?.message || "Payment not updated",
         date: new Date(),
       });
     }
@@ -48,22 +109,19 @@ ItensRouter.get(
   }
 );
 
-ItensRouter.get(
-  "/companies/items",
-  async (request, response) => {
-    try {
-      const fetchAll = new FetchAll(new ItemService());
-      const allItems = await fetchAll.execute();
-      return response.status(200).json(allItems);
-    } catch (error: any) {
-      return response.status(400).json({
-        status: 400,
-        message: error?.message || "There are no items registered",
-        date: new Date(),
-      });
-    }
+ItensRouter.get("/companies/items", async (request, response) => {
+  try {
+    const fetchAll = new FetchAll(new ItemService());
+    const allItems = await fetchAll.execute();
+    return response.status(200).json(allItems);
+  } catch (error: any) {
+    return response.status(400).json({
+      status: 400,
+      message: error?.message || "There are no items registered",
+      date: new Date(),
+    });
   }
-);
+});
 
 ItensRouter.get(
   "/companies/:companyId/items/:id",
@@ -117,7 +175,7 @@ ItensRouter.delete(
     try {
       const deletedItem = new Delete(new ItemService());
       await deletedItem.execute(id);
-      return response.status(200).json({message: "Item sucessfully deleted"});
+      return response.status(200).json({ message: "Item sucessfully deleted" });
     } catch (error: any) {
       return response.status(400).json({
         status: 400,

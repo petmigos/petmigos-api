@@ -17,7 +17,8 @@ const CompanySchema = new mongoose.Schema<Company>(
         address_logradouro: String,
         address_numero: String,
         address_complemento: String,
-        key: String
+        key: String,
+        paymentCredentials: String,
     },
     { timestamps: true }
 );
@@ -25,58 +26,66 @@ const CompanySchema = new mongoose.Schema<Company>(
 export const CompanyModel = mongoose.model<Company>("Company", CompanySchema);
 
 export class CompanyService implements ICompanyService {
-
-    private async connect(dbURL?: string): Promise<boolean> {
-        if (!dbURL) return false;
-        try {
-            mongoose.set("strictQuery", false);
-            await mongoose.connect(dbURL);
-            return true;
-        } catch (exception) {
-            return false;
-        }
+  private async connect(dbURL?: string): Promise<boolean> {
+    if (!dbURL) return false;
+    try {
+      mongoose.set("strictQuery", false);
+      await mongoose.connect(dbURL);
+      return true;
+    } catch (exception) {
+      return false;
     }
+  }
 
-    async findByEmail(email: string): Promise<Company | null> {
-        const isConnected = await this.connect(process.env.DB_URL);
-        if (!isConnected) throw new Error("Database was not connected.");
-        const foundCompany = await CompanyModel.findOne({ email: email });
-        return foundCompany;
-    }
+  async findById(id: string): Promise<Company | null | undefined> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const foundCompany = await CompanyModel.findOne({ _id: id });
+    return foundCompany;
+  }
 
-    async findByPassword(password: string): Promise<Company | null> {
-        const isConnected = await this.connect(process.env.DB_URL);
-        if (!isConnected) throw new Error("Database was not connected.");
-        const foundCompany = await CompanyModel.findOne({ password: password })
-        return foundCompany;
-    }
+  async findByEmail(email: string): Promise<Company | null> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const foundCompany = await CompanyModel.findOne({ email: email });
+    return foundCompany;
+  }
 
-    async findByCNPJ(cnpj: string): Promise<Company | null> {
-        const isConnected = await this.connect(process.env.DB_URL);
-        if (!isConnected) throw new Error("Database was not connected.");
-        const foundCompany = await CompanyModel.findOne({ cnpj: cnpj });
-        return foundCompany;
-    }
+  async findByPassword(password: string): Promise<Company | null> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const foundCompany = await CompanyModel.findOne({ password: password });
+    return foundCompany;
+  }
 
-    async findCompany(email: string, password: string): Promise<Company | null> {
-        const isConnected = await this.connect(process.env.DB_URL);
-        if (!isConnected) throw new Error("Database was not connected.");
-        const foundCompany = await CompanyModel.findOne({ email: email, password: password })
-        return foundCompany;
-    }
+  async findByCNPJ(cnpj: string): Promise<Company | null> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const foundCompany = await CompanyModel.findOne({ cnpj: cnpj });
+    return foundCompany;
+  }
 
-    async create(newCompany: Company): Promise<Company | undefined> {
-        const isConnected = await this.connect(process.env.DB_URL);
-        if (!isConnected) throw new Error("Database was not connected.");
-        const createdCompany = await CompanyModel.create(newCompany);
-        return createdCompany;
-    }
+  async findCompany(email: string, password: string): Promise<Company | null> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const foundCompany = await CompanyModel.findOne({
+      email: email,
+      password: password,
+    });
+    return foundCompany;
+  }
 
-    async getAllCompanies(): Promise<Company[]> {
-        const isConnected = await this.connect(process.env.DB_URL);
-        if (!isConnected) throw new Error("Database was not connected.");
-        const companies = await CompanyModel.find();
-        return companies;
-      }
+  async create(newCompany: Company): Promise<Company | undefined> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const createdCompany = await CompanyModel.create(newCompany);
+    return createdCompany;
+  }
 
+  async getAllCompanies(): Promise<Company[]> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const companies = await CompanyModel.find();
+    return companies;
+  }
 }

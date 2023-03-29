@@ -14,6 +14,7 @@ export interface Company{
         address_numero: String,
         address_complemento: String,
         key: string,
+        paymentCredentials: string,
         createdAt?: Date;
         updatedAt?: Date;
 };
