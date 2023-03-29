@@ -1,5 +1,6 @@
 export interface Company{
         _id?: string,
+        image: string,
         cnpj: string,
         category: string,
         name: string,
@@ -11,5 +12,8 @@ export interface Company{
         address_cidade: String,
         address_logradouro: String,
         address_numero: String,
-        address_complemento: String
+        address_complemento: String,
+        key: string,
+        createdAt?: Date;
+        updatedAt?: Date;
 };

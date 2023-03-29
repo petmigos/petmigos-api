@@ -5,4 +5,5 @@ export interface IUserService {
     findByEmail(email: string): Promise<User | null>;
     findByPassword(password: string): Promise<User | null>;
     findUser(email: string, password: string): Promise<User | null>
+    findUserById(id: string): Promise<User | null>
 }

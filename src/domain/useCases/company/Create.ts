@@ -1,4 +1,4 @@
-import { Company } from "../../entities/company";
+import { Company } from "../../entities/Company";
 import { ICompanyService } from "../../ports/icompany_service";
 
 export class Create {

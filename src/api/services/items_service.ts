@@ -1,6 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import { Item } from "../../domain/entities/Item";
 import { IItemService } from "../../domain/ports/iitems_service";
+import cloudinary from 'cloudinary'
+
 
 const ItemSchema = new mongoose.Schema<Item>(
   {
@@ -77,8 +79,19 @@ export class ItemService implements IItemService {
   }
 
   async delete(id: string): Promise<void> {
+    cloudinary.v2.config({
+      cloud_name: "petmigosimages",
+      api_key: "218227198987731",
+      api_secret: "JImGB4Cuw8uN-50fHpt0IwjJwT4"
+    });
     const isConnected = await this.connect(process.env.DB_URL);
     if (!isConnected) throw new Error("Database was not connected.");
+    const item = ItemModel.findById({ _id: id }).lean().exec();
+    let imageId: any = (await item).image;
+    imageId = imageId.split("/").pop().split(".")[0];
+    console.log(imageId);
+    await cloudinary.v2.uploader.destroy(imageId)
     await ItemModel.findByIdAndDelete({ _id: id });
   }
+
 }

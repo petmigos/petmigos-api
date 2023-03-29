@@ -1,5 +1,5 @@
 import { Request, Router } from "express";
-import { Company } from "../../domain/entities/company";
+import { Company } from "../../domain/entities/Company";
 import { Create } from "../../domain/useCases/company/Create";
 import { LoginCompany } from "../../domain/useCases/company/LoginCompany";
 import { CompanyService } from "../services/company_service";

@@ -18,6 +18,8 @@ describe("Paygo Payment Service", () => {
           description: "Banho",
           image: "https://github.com/gabrielSantosLima.png",
           price: 20,
+          quantity: 1,
+          companyId: "12",
           title: "Banho e tosa - Petshop AuAu",
         },
         payment: {
@@ -25,8 +27,8 @@ describe("Paygo Payment Service", () => {
           type: PaymentTypeEnum.DEBIT_CARD,
         },
       },
-      "1",
-      "1"
+      "123a",
+      "123b"
     );
     const isValid = response.url !== "" && response._id;
     expect(isValid).toBeTruthy();
