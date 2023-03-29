@@ -68,9 +68,10 @@ export class UserService implements IUserService {
 
     async findUserById(id: string): Promise<User | null> {
         const isConnected = await this.connect(process.env.DB_URL);
-        const id_user = new ObjectId(id);
         if (!isConnected) throw new Error("Database was not connected.");
-        const foundUser = await UserModel.findOne({ _id: id_user});
+        const objectId = new ObjectId(id);
+        const foundUser = await UserModel.findOne({ _id: id});
+        if (foundUser === null) return null;
         return foundUser;
     }
 }

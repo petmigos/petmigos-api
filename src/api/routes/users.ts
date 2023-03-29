@@ -4,6 +4,7 @@ import { Create } from "../../domain/useCases/user/Create";
 import { LoginUser } from "../../domain/useCases/user/LoginUser"
 import { UserService } from "../services/user_service";
 import { UserAuthentication } from "../../domain/entities/user_authentication";
+import { Find } from "../../domain/useCases/user/Find";
 
 export const UsersRouter = Router();
 
@@ -46,19 +47,20 @@ UsersRouter.post(
 );
 
 UsersRouter.get(
-    "/users/:userId",
+    "/user/:userId",
     async (request, response) => {
         try{
             console.log("user route")
-            const userService = new UserService();
-            const user = userService.findUserById(request.params.userId);
-            console.log("user: " + user)
-            return response.status(200).json(user);
+            const userService = new Find(new UserService());
+            console.log("ID A SER PROCURADO: " + request.params.userId)
+            const foundUser = userService.execute(request.params.userId)
+            console.log("found user:  " + foundUser)
+            return response.status(200).json(foundUser);
         }
         catch (error: any) {
             return response.status(500).json({
               status: 500,
-              message: error?.message || "Failed to retrieve users",
+              message: error?.message || "Failed to retrieve user",
               date: new Date(),
             });
         }
