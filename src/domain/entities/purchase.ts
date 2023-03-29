@@ -1,11 +1,4 @@
 import { Item } from "./Item";
-import { User } from "./user";
-
-export enum PaymentTypeEnum {
-  CREDIT_CARD = "CREDIT_CARD",
-  DEBIT_CARD = "DEBIT_CARD",
-  PIX = "PIX",
-}
 
 export enum PurchaseStatusEnum {
   PENDING = "Pendente",
@@ -13,20 +6,17 @@ export enum PurchaseStatusEnum {
   CANCELED = "Cancelado",
 }
 
-export interface Payment {
-  type: PaymentTypeEnum;
-  country: string;
+export interface PurchaseInfo {
+  title: string;
+  quantity: number;
+  unitPrice: number;
 }
 
-export interface Purchase {
+export interface Purchase extends PurchaseInfo {
   _id?: string;
-  quantity: number;
-  totalPrice: number;
+  transactionCode: string;
   status: PurchaseStatusEnum;
   item?: Item;
-  user?: User;
-  payment?: Payment;
-  transactionCode?: string;
   createdAt?: string;
   updatedAt?: string;
 }

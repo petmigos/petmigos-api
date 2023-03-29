@@ -1,9 +1,5 @@
-import { Purchase, PurchaseResponse } from "../entities/purchase";
+import { PurchaseInfo, PurchaseResponse } from "../entities/purchase";
 
 export interface IPaymentService {
-  buy(
-    newPurchase: Purchase,
-    itemId: string,
-    userId: string
-  ): Promise<PurchaseResponse>;
+  buy(newPurchase: PurchaseInfo, itemId: string): Promise<PurchaseResponse>;
 }
