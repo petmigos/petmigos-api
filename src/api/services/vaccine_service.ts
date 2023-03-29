@@ -47,4 +47,23 @@ export class VaccineService implements IVaccineService {
     }).populate("pet");
     return allVaccines;
   }
+
+  async findByIdAndUpdate(
+    vaccineId: string,
+    updatedVaccine: Vaccine
+  ): Promise<Vaccine | undefined> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const vaccineUpdated = await VaccineModel.findByIdAndUpdate(vaccineId, {
+      ...updatedVaccine,
+    });
+    if (vaccineUpdated == null) return undefined;
+    return vaccineUpdated;
+  }
+
+  async delete(vaccineId: string): Promise<void> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    await VaccineModel.findByIdAndDelete({ _id: vaccineId });
+  }
 }

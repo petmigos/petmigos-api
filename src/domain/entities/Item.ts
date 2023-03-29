@@ -1,4 +1,4 @@
-import { Company } from "./company";
+import { Company } from "./Company";
 
 export interface Item {
   _id?: string;

@@ -3,22 +3,24 @@ import { Company } from "../../domain/entities/Company";
 import { ICompanyService } from "../../domain/ports/icompany_service";
 
 const CompanySchema = new mongoose.Schema<Company>(
-  {
-    cnpj: String,
-    category: String,
-    name: String,
-    email: String,
-    password: String,
-    signature: String,
-    address_cep: String,
-    address_uf: String,
-    address_cidade: String,
-    address_logradouro: String,
-    address_numero: String,
-    address_complemento: String,
-    paymentCredentials: String,
-  },
-  { timestamps: true }
+    {
+        image: String,
+        cnpj: String,
+        category: String,
+        name: String,
+        email: String,
+        password: String,
+        signature: String,
+        address_cep: String,
+        address_uf: String,
+        address_cidade: String,
+        address_logradouro: String,
+        address_numero: String,
+        address_complemento: String,
+        key: String,
+        paymentCredentials: String,
+    },
+    { timestamps: true }
 );
 
 export const CompanyModel = mongoose.model<Company>("Company", CompanySchema);

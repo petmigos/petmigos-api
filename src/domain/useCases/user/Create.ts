@@ -8,7 +8,6 @@ export class Create {
     async execute(newUser: User): Promise<User | undefined> {
 
         const user_email = await this.userService.findByEmail(newUser.email);
-        console.log("user: " + user_email);
         if(!user_email) {
             return this.userService.create(newUser)
         }
