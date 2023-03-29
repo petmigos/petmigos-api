@@ -13,6 +13,7 @@ describe("Paygo Payment Service", () => {
       "6411fa032f22ce7439ab7382",
       process.env.PAYMENT_KEY!!
     );
+    console.log(response);
     const isValid = response.url !== "" && response._id;
     expect(isValid).toBeTruthy();
   });
