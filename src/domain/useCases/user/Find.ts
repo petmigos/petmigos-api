@@ -8,10 +8,11 @@ export class Find {
 
     async execute(id: string): Promise<User | undefined> {
         
-        const user = await this.userService.findUserById(id)
-        if (user) return user;
-        else throw new Error("User not found.");
-        
+        const user = await this.userService.findUserById(id);
+        console.log("find: " + user)
+        if(user) return user;
+        else throw new Error("User not found")
+
     }
 }
 

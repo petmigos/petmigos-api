@@ -48,13 +48,15 @@ UsersRouter.post(
 
 UsersRouter.get(
     "/user/:userId",
-    async (request, response) => {
+    async (request: Request<{ userId: string; }, {}, {}, {}>, response) => {
+        const { userId } = request.params;
         try{
             console.log("user route")
             const userService = new Find(new UserService());
-            console.log("ID A SER PROCURADO: " + request.params.userId)
-            const foundUser = userService.execute(request.params.userId)
-            console.log("found user:  " + foundUser)
+            console.log("ID A SER PROCURADO: " + userId)
+            const foundUser = await userService.execute(userId)
+            const res =JSON.stringify(foundUser)
+            console.log("found user:  " + res)
             return response.status(200).json(foundUser);
         }
         catch (error: any) {

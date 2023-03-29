@@ -3,6 +3,7 @@ import { Vaccine } from "../../domain/entities/vaccine";
 import { Create } from "../../domain/useCases/vaccines/Create";
 import { FindAll } from "../../domain/useCases/vaccines/FindAll";
 import { VaccineService } from "../services/vaccine_service";
+import { DeleteVaccine } from "../../domain/useCases/vaccines/DeleteVaccine";
 
 export const VaccinesRouter = Router();
 
@@ -38,6 +39,27 @@ VaccinesRouter.post(
       return response.status(400).json({
         status: 400,
         message: error?.message || "Vaccine was not created.",
+        date: new Date(),
+      });
+    }
+  }
+);
+
+VaccinesRouter.delete(
+  "/pets/:petId/vaccines/:vaccineId",
+  async (
+    request: Request<{ petId: string; vaccineId: string }, {}, {}, {}>,
+    response
+  ) => {
+    const { vaccineId } = request.params;
+    try {
+      const deletedVaccine = new DeleteVaccine(new VaccineService());
+      await deletedVaccine.execute(vaccineId);
+      return response.status(200).json({message: "Item sucessfully deleted"});
+    } catch (error: any) {
+      return response.status(400).json({
+        status: 400,
+        message: error?.message || "This item could not be deleted",
         date: new Date(),
       });
     }
