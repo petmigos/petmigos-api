@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
-import { Company } from "../../domain/entities/company";
+import { Company } from "../../domain/entities/Company";
 import { ICompanyService } from "../../domain/ports/icompany_service";
 
 const CompanySchema = new mongoose.Schema<Company>(
     {
+        image: String,
         cnpj: String,
         category: String,
         name: String,
@@ -15,7 +16,8 @@ const CompanySchema = new mongoose.Schema<Company>(
         address_cidade: String,
         address_logradouro: String,
         address_numero: String,
-        address_complemento: String
+        address_complemento: String,
+        key: String
     },
     { timestamps: true }
 );
