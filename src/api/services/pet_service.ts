@@ -60,8 +60,7 @@ export class PetService implements IPetService {
   async findByIdAndUpdate(pet_id: string, newPet: Pet): Promise<Pet | undefined> {
     const isConnected = await this.connect(process.env.DB_URL);
     if (!isConnected) throw new Error("Database was not connected.");
-    const petUpdated = await PetModel.findByIdAndUpdate({
-      _id: pet_id,
+    const petUpdated = await PetModel.findByIdAndUpdate(pet_id, {
       ...newPet,
     });
     if (petUpdated == null) return undefined;
