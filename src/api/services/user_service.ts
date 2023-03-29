@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 import { User } from "../../domain/entities/user";
 import { IUserService } from "../../domain/ports/iuser_service";
@@ -7,6 +8,7 @@ const UserSchema = new mongoose.Schema<User>(
         name: String,
         email: String,
         password: String,
+        image: String
     },
     { timestamps: true }
 );
@@ -62,6 +64,15 @@ export class UserService implements IUserService {
         const foundUser = await UserModel.findOne({email: email});
         if (foundUser == undefined) return undefined;
         else return foundUser;
+    }
+
+    async findUserById(id: string): Promise<User | null> {
+        const isConnected = await this.connect(process.env.DB_URL);
+        if (!isConnected) throw new Error("Database was not connected.");
+        const objectId = new ObjectId(id);
+        const foundUser = await UserModel.findOne({ _id: id});
+        if (foundUser === null) return null;
+        return foundUser;
     }
 }
 
