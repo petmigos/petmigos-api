@@ -52,12 +52,11 @@ export class PaymentService implements IPaymentService {
 
   async buy(
     newPurchase: PurchaseInfo,
-    itemId: string
+    itemId: string,
+    accessToken: string
   ): Promise<PurchaseResponse> {
     const isConnected = await this.connect(process.env.DB_URL);
     if (!isConnected) throw new Error("Database was not connected.");
-    const paymentKey = process.env.PAYMENT_KEY;
-    if (!paymentKey) throw new Error("Payment credencials not found.");
     const data: MercadoPagoPayment = {
       items: [
         {
@@ -70,7 +69,7 @@ export class PaymentService implements IPaymentService {
     };
     try {
       configure({
-        access_token: paymentKey,
+        access_token: accessToken,
       });
 
       const mercadoResponse = await preferences.create({

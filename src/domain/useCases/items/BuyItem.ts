@@ -15,6 +15,10 @@ export class BuyItem {
   ): Promise<PurchaseResponse> {
     const foundCompany = await this.companyService.findById(userId);
     if (!foundCompany) throw new Error("Company not found");
-    return this.paymentService.buy(newPurchase, itemId);
+    return this.paymentService.buy(
+      newPurchase,
+      itemId,
+      foundCompany.paymentCredentials
+    );
   }
 }

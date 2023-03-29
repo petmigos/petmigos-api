@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Company } from "../../domain/entities/company";
+import { Company } from "../../domain/entities/Company";
 import { ICompanyService } from "../../domain/ports/icompany_service";
 
 const CompanySchema = new mongoose.Schema<Company>(
@@ -16,6 +16,7 @@ const CompanySchema = new mongoose.Schema<Company>(
     address_logradouro: String,
     address_numero: String,
     address_complemento: String,
+    paymentCredentials: String,
   },
   { timestamps: true }
 );
