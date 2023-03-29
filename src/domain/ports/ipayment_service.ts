@@ -6,4 +6,6 @@ export interface IPaymentService {
     itemId: string,
     accessToken: string
   ): Promise<PurchaseResponse>;
+
+  updateByTransactionCode(transactionCode: string): Promise<void>;
 }

@@ -7,6 +7,7 @@ import { FetchAll } from "../../domain/useCases/items/FetchAll";
 import { FetchAllByCompany } from "../../domain/useCases/items/FetchAllByCompany";
 import { FindById } from "../../domain/useCases/items/FindById";
 import { FindByIdAndCompany } from "../../domain/useCases/items/FindByIdAndCompany";
+import { UpdateByTransactionCode } from "../../domain/useCases/items/UpdateByTransactionCode";
 import { CompanyService } from "../services/company_service";
 import { ItemService } from "../services/items_service";
 import { PaymentService } from "../services/payment_service";
@@ -61,6 +62,28 @@ ItensRouter.post(
       return response.status(400).json({
         status: 400,
         message: error?.message || "Payment not found",
+        date: new Date(),
+      });
+    }
+  }
+);
+
+ItensRouter.post(
+  "/companies/items/update",
+  async (request: Request<{}, {}, {}, { internal_id: string }>, response) => {
+    const { internal_id } = request.query;
+    try {
+      const updateByTransactionCode = new UpdateByTransactionCode(
+        new PaymentService()
+      );
+      await updateByTransactionCode.execute(internal_id);
+      return response.status(200).json({
+        message: "Payment updated",
+      });
+    } catch (error: any) {
+      return response.status(400).json({
+        status: 400,
+        message: error?.message || "Payment not updated",
         date: new Date(),
       });
     }

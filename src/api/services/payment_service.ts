@@ -1,4 +1,5 @@
 import { AxiosError } from "axios";
+import { randomUUID } from "crypto";
 import { configure, preferences } from "mercadopago";
 import mongoose, { model, Schema } from "mongoose";
 import {
@@ -8,7 +9,6 @@ import {
   PurchaseStatusEnum,
 } from "../../domain/entities/purchase";
 import { IPaymentService } from "../../domain/ports/ipayment_service";
-
 interface MercadoPagoItem {
   title: string;
   quantity: number;
@@ -72,13 +72,16 @@ export class PaymentService implements IPaymentService {
         access_token: accessToken,
       });
 
+      const transactionCode = randomUUID();
+
       const mercadoResponse = await preferences.create({
         items: data.items,
+        notification_url: `http://${process.env.HOST}/companies/items/update?internal_id=${transactionCode}`,
       });
 
       const createdPurchase = await PurchaseModel.create({
         ...newPurchase,
-        transactionCode: mercadoResponse.body["id"],
+        transactionCode: transactionCode,
         item: itemId,
       });
 
@@ -90,5 +93,14 @@ export class PaymentService implements IPaymentService {
       console.log((error as AxiosError).response?.data);
       throw new Error(error.message || "Error on Paygo Payment. ");
     }
+  }
+
+  async updateByTransactionCode(transactionCode: string): Promise<void> {
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    await PurchaseModel.findOneAndUpdate(
+      { transactionCode: transactionCode },
+      { status: PurchaseStatusEnum.PAID }
+    );
   }
 }

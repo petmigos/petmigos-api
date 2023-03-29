@@ -12,5 +12,5 @@ export interface Company {
   address_logradouro: String;
   address_numero: String;
   address_complemento: String;
-  paymentCredentials: String;
+  paymentCredentials: string;
 }
