@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import { GenderEnum } from "../../domain/entities/gender_enum";
 import { Pet } from "../../domain/entities/pet";
 import { IPetService } from "../../domain/ports/ipet_service";
+import cloudinary from "cloudinary";
 
 const PetSchema = new mongoose.Schema<Pet>(
   {
@@ -57,7 +58,10 @@ export class PetService implements IPetService {
     return foundPet;
   }
 
-  async findByIdAndUpdate(pet_id: string, newPet: Pet): Promise<Pet | undefined> {
+  async findByIdAndUpdate(
+    pet_id: string,
+    newPet: Pet
+  ): Promise<Pet | undefined> {
     const isConnected = await this.connect(process.env.DB_URL);
     if (!isConnected) throw new Error("Database was not connected.");
     const petUpdated = await PetModel.findByIdAndUpdate(pet_id, {
@@ -67,4 +71,19 @@ export class PetService implements IPetService {
     return petUpdated;
   }
 
+  async delete(id: string): Promise<void> {
+    cloudinary.v2.config({
+      cloud_name: "petmigosimages",
+      api_key: "218227198987731",
+      api_secret: "JImGB4Cuw8uN-50fHpt0IwjJwT4",
+    });
+    const isConnected = await this.connect(process.env.DB_URL);
+    if (!isConnected) throw new Error("Database was not connected.");
+    const item = PetModel.findById({ _id: id }).lean().exec();
+    let imageId: any = (await item).image;
+    imageId = imageId.split("/").pop().split(".")[0];
+    console.log(imageId);
+    await cloudinary.v2.uploader.destroy(imageId);
+    await PetModel.findByIdAndDelete({ _id: id });
+  }
 }
