@@ -87,7 +87,7 @@ export class PaymentService implements IPaymentService {
 
       return {
         _id: createdPurchase._id,
-        url: mercadoResponse.body["sandbox_init_point"],
+        url: mercadoResponse.body["init_point"],
       };
     } catch (error: any) {
       console.log((error as AxiosError).response?.data);
